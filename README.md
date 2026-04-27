@@ -1,2 +1,80 @@
 # ecommerce-model-DIO
 Projeto conceitual de banco de dados para E-commerce
+
+Contexto
+
+Este projeto consiste na modelagem conceitual de um banco de dados para um sistema de E-commerce. O objetivo é representar as principais entidades e relacionamentos envolvidos na operação de uma loja virtual, contemplando desde o cadastro de clientes e fornecedores até a gestão de pedidos, pagamentos e entregas.
+
+
+Escopo do Modelo
+
+O modelo abrange os seguintes aspectos:
+
+Clientes
+- Clientes podem ser Pessoa Física (PF) ou Pessoa Jurídica (PJ).
+- Cada cliente possui um documento (CPF ou CNPJ), armazenado em uma entidade `Documento`.
+- Clientes compartilham atributos comuns através da entidade `Cadastro` (nome, telefone, endereço, e-mail, etc.).
+
+Fornecedores
+- Fornecedores também utilizam a entidade `Cadastro` para dados comuns.
+- Cada fornecedor possui uma categoria e pode disponibilizar vários produtos.
+
+Produtos
+- Produtos possuem nome, descrição, prazo de devolução, voltagem e cores.
+- Um produto pode ter várias imagens e estar em vários locais de estoque.
+- Produtos podem ser fornecidos por múltiplos fornecedores e armazenados em múltiplos estoques.
+
+Pedidos
+- Um pedido está associado a um único cliente.
+- Um pedido pode conter vários produtos (com quantidade específica por produto).
+- Um pedido pode ser pago com uma ou mais formas de pagamento (cartão, pix, boleto, etc.).
+
+Entrega
+- Cada pedido gera uma entrega.
+- A entrega possui status (ex: "Em separação", "Enviado", "Entregue") e código de rastreio.
+
+Imagens e Especificações
+- Produtos podem ter múltiplas imagens, sendo uma delas a imagem principal.
+- Cores e voltagens são tratadas como entidades separadas para evitar redundância.
+
+
+Estrutura do Modelo (Principais Entidades)
+
+| Entidade 		| Descrição |
+|----------		|-----------|
+| `Cadastro` 		| Dados comuns a clientes e fornecedores (nome, endereço, telefone, e-mail) |
+| `Documento` 		| CPF ou CNPJ, com tipo (PF/PJ) |
+| `Cliente` 		| Especialização de `Cadastro` com data de cadastro |
+| `Fornecedor` 		| Especialização de `Cadastro` com categoria |
+| `Produto` 		| Produtos vendidos no e-commerce |
+| `Estoque` 		| Locais de armazenamento com quantidade por produto |
+| `Pedido` 		| Pedidos realizados por clientes |
+| `Produtos_pedido` 	| Itens de um pedido (produto + quantidade) |
+| `Forma_pagamento` 	| Tipos de pagamento disponíveis |
+| `Efetua_pagamento` 	| Relacionamento entre pedido e forma(s) de pagamento |
+| `Entrega`		| Status e rastreio da entrega do pedido |
+| `Imagem` 		| Imagens associadas a produtos |
+| `Cor` 		| Cores disponíveis para produtos |
+| `Voltagem` 		| Voltagens disponíveis (110V, 220V, Bivolt) |
+
+
+Relacionamentos Importantes
+
+| Relacionamento 					| Cardinalidade | Descrição 	|
+|---------------------------------------|---------------|---------------------|
+| `Cadastro` → `Cliente` 				| 1 : 1 | Um cadastro pode ser um cliente |
+| `Cadastro` → `Fornecedor` 				| 1 : 1 | Um cadastro pode ser um fornecedor |
+| `Cliente` → `Pedido` 					| 1 : N | Um cliente pode ter vários pedidos |
+| `Pedido` → `Produtos_pedido` → `Produto` 		| N : N | Pedido contém vários produtos |
+| `Pedido` → `Efetua_pagamento` → `Forma_pagamento` 	| N : N | Pedido pode ter várias formas de pagamento |
+| `Pedido` → `Entrega` 					| 1 : 1 | Cada pedido tem uma entrega |
+| `Fornecedor` → `Disponibiliza_Produto` → `Produto` 	| N : N | Fornecedor pode disponibilizar vários produtos |
+| `Produto` → `Imagem` 					| 1 : N | Produto pode ter várias imagens |
+| `Produto` ↔ `Cor` 					| N : N | Produto pode ter várias cores |
+| `Produto` ↔ `Voltagem` 				| N : N | Produto pode ter várias voltagens |
+| `Produto` → `Produto_has_Estoque` → `Estoque` 	| N : N | Produto pode estar em vários estoques |
+
+
+Ferramenta Utilizada
+
+- MySQL Workbench – Para modelagem conceitual e diagrama EER.
